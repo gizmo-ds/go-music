@@ -1,0 +1,72 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">
+    <div class="row">
+    	<div class="panel panel-default">
+    	  <div class="panel-heading">酷狗音乐搜索</div>
+    	  <div class="panel-body">
+    	    <form method="POST" action="/kugou" accept-charset="UTF-8">
+    	      <div class="input-group">
+    	        <input class="form-control" id="key" name="key" placeholder="如: 周杰伦" autocomplete="off" value="{{.Value}}">
+    	        <span class="input-group-btn">
+    	          <button class="btn btn-default" type="submit" onclick="return y();">搜索</button>
+    	        </span>
+    	      </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="h"> 优先选择高音质
+              </label>
+            </div>
+    	    </form>
+    	  </div>
+    	</div>
+        {{if .NotHide}}
+    	<div class="panel panel-success">
+    	  <div class="panel-heading">共搜索到音乐{{.List|len}}首</div>
+    	  <table class="table table-hover">
+    	    <thead>
+    	      <tr>
+    	        <th>#</th>
+    	        <th>音乐标题</th>
+    	        <th>歌手</th>
+    	        <th>操作</th>
+    	      </tr>
+    	    </thead>
+    	    <tbody>
+              {{range .List}}
+    	      <tr>
+    	        <th scope="row">{{.Id}}</th>
+    	        <td>{{.Title}}</td>
+    	        <td>{{.Name}}</td>
+    	        <td>
+                  <form method="POST" action="/kugou/{{.Hash}}" accept-charset="UTF-8" target="_blank">
+                    <input type="hidden" id="Title" name="Title" value="{{.Title}}">
+                    <input type="hidden" id="Name" name="Name" value="{{.Name}}">
+                    <input type="hidden" id="HashMV" name="HashMV" value="{{.HashMV}}">
+                    <input type="hidden" id="Album" name="Album" value="{{.Album}}">
+                    <button class="btn btn-primary btn-xs" type="submit" target="_blank">查看详细</button>
+                  </form>
+    	        </td>
+    	      </tr>
+              {{end}}
+    	    </tbody>
+    	  </table>
+    	</div>
+        {{end}}
+    </div>
+</div>
+<script type="text/javascript">
+  function y(){
+    var old = document.getElementById("key")
+    if(old.value.length < 1){
+      alert("输入内容不正确");
+      return false
+    }
+    return true
+  }
+</script>
+{{template "tongji".}}
+</body>
+</html>

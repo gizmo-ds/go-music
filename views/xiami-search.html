@@ -1,0 +1,89 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">
+    <div class="row">
+    	<div class="panel panel-default">
+    	  <div class="panel-heading">虾米音乐搜索</div>
+    	  <div class="panel-body">
+    	    <form method="POST" action="/xiami" accept-charset="UTF-8">
+    	      <div class="input-group">
+    	        <input class="form-control" id="key" name="key" placeholder="如: 腐草为萤" autocomplete="off" value="{{.Value}}">
+    	        <span class="input-group-btn">
+    	          <button class="btn btn-default" type="submit" onclick="return y();">搜索</button>
+    	        </span>
+    	      </div>
+    	    </form>
+    	  </div>
+    	</div>
+        {{if .NotHide}}
+    	<div class="panel panel-success">
+    	  <div class="panel-heading">共搜索到音乐{{.List|len}}首</div>
+    	  <table class="table table-hover">
+    	    <thead>
+    	      <tr>
+    	        <th>#</th>
+    	        <th>音乐标题</th>
+    	        <th>歌手</th>
+                <th>专辑</th>
+    	        <th>操作</th>
+    	      </tr>
+    	    </thead>
+    	    <tbody>
+              {{range .List}}
+    	      <tr>
+    	        <th scope="row">{{.Id}}</th>
+    	        <td>{{.Song_name}}</td>
+    	        <td>{{.Artist_name}}</td>
+                <td>{{.Album_name}}</td>
+    	        <td> 
+                  <form method="POST" action="/xiami/{{.Song_id}}" accept-charset="UTF-8" target="_blank">
+                    <input type="hidden" id="Song_name" name="Song_name" value="{{.Song_name}}">
+                    <input type="hidden" id="Artist_name" name="Artist_name" value="{{.Artist_name}}">
+                    <input type="hidden" id="Album_name" name="Album_name" value="{{.Album_name}}">
+                    <input type="hidden" id="Album_logo" name="Album_logo" value="{{.Album_logo}}">
+                    <input type="hidden" id="Listen_file" name="Listen_file" value="{{.Listen_file}}">
+                    <input type="hidden" id="Artist_logo" name="Artist_logo" value="{{.Artist_logo}}">
+                    <a class="btn btn-success btn-xs" role="button" href="{{.Listen_file}}" download="{{.Listen_file}}">下载音乐</a>
+                    <button class="btn btn-primary btn-xs" type="submit" target="_blank">查看详细</button>
+                  </form>
+    	        </td>
+    	      </tr>
+              {{end}}
+    	    </tbody>
+    	  </table>
+    	</div>
+        {{else}}
+        <div class="panel panel-default">
+          <div class="panel-heading">请输入音乐ID或音乐分享链接</div>
+          <div class="panel-body">
+            <form method="POST" action="/xiami" accept-charset="UTF-8">
+              <div class="input-group">
+                <input class="form-control" id="songId" name="songId" placeholder="如: http://www.xiami.com/song/1772346942" autocomplete="off">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+<script type="text/javascript">
+  function y(){
+    var old = document.getElementById("key")
+    if(old.value.length < 1){
+      alert("输入内容不正确");
+      return false
+    }
+    return true
+  }
+  function copy(url){
+    prompt('您的浏览器不支持复制，请 Ctrl+C 复制', url);
+  }
+</script>
+{{template "tongji".}}
+</body>
+</html>

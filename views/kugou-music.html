@@ -1,0 +1,39 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">{{with .Song}}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <a href="{{.Pic}}" target="_blank"><img src="{{.Pic}}" class="img-responsive" alt="Responsive image" style="float: left;" width="180" height="180"></a>
+          <div style="margin-left: 195px;margin-top: -20px;">
+            <h2>{{.Title}}</h2>
+            <p>{{.Album}}</p>
+            <p>{{.Name}}</p>
+            <a class="btn btn-success btn-sm" role="button" href="{{.Url}}" download="{{.Url}}">下载音乐</a>
+            <a class="btn btn-primary btn-sm" role="button" onclick="copy('{{.Url}}');">复制链接</a>
+          </div>
+          <div style="margin-top: 36px;">
+            <audio src="{{.Url}}" type="audio/mp3" controls="controls" width="100%"></audio>
+            <script>
+              $('audio,video').mediaelementplayer();
+            </script>
+          </div>
+        </div>
+      </div> 
+    </div>
+    <div class="col-md-4">
+      {{template "cunyu".}}
+    </div>
+  </div>{{end}}
+</div>
+<script type="text/javascript">
+  function copy(url){
+    prompt('您的浏览器不支持复制，请 Ctrl+C 复制', url);
+  }
+</script>
+{{template "tongji".}}
+</body>
+</html>

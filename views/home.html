@@ -1,0 +1,64 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">最近查询单曲</div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>音乐标题</th>
+            <th>歌手</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>{{range .SongRecord}}
+          <tr>
+            <td>{{.Title}}</td>
+            <td>{{.Name}}</td>
+            <td>
+              <a href="{{.Url}}" class="btn btn-primary btn-xs" role="button">查看详细</a>
+            </td>
+          </tr>{{end}}
+        </tbody>
+      </table>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">最近查询歌单</div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>歌曲数量</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>{{range .ListRecord}}
+          <tr>
+            <td>{{.Title}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Views}}</td>
+            <td>
+              <a href="/list/{{.Id}}" class="btn btn-primary btn-xs" role="button">查看详细</a>
+            </td>
+          </tr>{{end}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">友情链接</div>
+      <div class="panel-body">
+      <div class="btn-group" role="group">
+        <a class="btn btn-default" href="http://www.loadfield.com/" target="_blank" role="button">负荷领域</a>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{template "tongji".}}
+</body>
+</html>

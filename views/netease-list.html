@@ -1,0 +1,72 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">
+    <div class="row">
+    	<div class="panel panel-default">
+    	  <div class="panel-heading">请输入歌单ID或歌单分享链接</div>
+    	  <div class="panel-body">
+    	    <form method="POST" action="/list">
+    	      <div class="input-group">
+    	        <input class="form-control" id="listId" name="listId" placeholder="如: http://music.163.com/#/m/playlist?id=172927400" autocomplete="off" value="{{.Value}}">
+    	        <span class="input-group-btn">
+    	          <button class="btn btn-default" type="submit" onclick="return y();">确认查询</button>
+    	        </span>
+    	      </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="h"> 优先选择高音质
+              </label>
+            </div>
+    	    </form>
+    	  </div>
+    	</div>
+        {{if .NotHide}}
+    	<div class="panel panel-success">
+        {{with .Info}}
+    	  <div class="panel-heading">{{.Title}}</div>
+          <div class="panel-body">
+          <p>歌单作者: {{.Name}}</p>
+          <p>歌单简介: {{.Description}}</p>
+          </div>
+    	  <table class="table table-hover">
+    	    <thead>
+    	      <tr>
+    	        <th>#</th>
+    	        <th>音乐标题</th>
+    	        <th>歌手</th>
+    	        <th>操作</th>
+    	      </tr>
+    	    </thead>
+    	    <tbody>
+              {{range .List}}
+    	      <tr>
+    	        <th scope="row">{{.I}}</th>
+    	        <td>{{.Title}}</td>
+    	        <td>{{.Name}}</td>
+    	        <td>
+    	        <a href="/music/{{.Id}}{{if .H}}?h=on{{end}}" class="btn btn-primary btn-xs" role="button" target="_blank">查看详细</a>
+    	        </td>
+    	      </tr>
+              {{end}}
+    	    </tbody>
+    	  </table>
+          {{end}}
+    	</div>
+        {{end}}
+    </div>
+</div>
+<script type="text/javascript">
+  function y(){
+    var old = document.getElementById("listId")
+    if(old.value.length < 5){
+      alert("输入内容不正确");
+      return false
+    }
+    return true
+  }
+</script>
+{{template "tongji".}}
+</body>
+</html>

@@ -1,0 +1,67 @@
+{{template "header".}}
+  <title>{{.Title}}</title>
+{{template "navbar".}}
+{{template "jumbotron".}}
+<div class="container">
+    <div class="row">
+    	<div class="panel panel-default">
+    	  <div class="panel-heading">请输入专辑ID或专辑分享链接</div>
+    	  <div class="panel-body">
+    	    <form method="POST" action="/album">
+    	      <div class="input-group">
+    	        <input class="form-control" id="albumId" name="albumId" placeholder="如: http://music.163.com/#/m/album?id=2951070" autocomplete="off" value="{{.Value}}">
+    	        <span class="input-group-btn">
+    	          <button class="btn btn-default" type="submit" onclick="return y();">确认查询</button>
+    	        </span>
+    	      </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="h"> 优先选择高音质
+              </label>
+            </div>
+    	    </form>
+    	  </div>
+    	</div>
+        {{if .NotHide}}
+    	<div class="panel panel-success">
+    	  <div class="panel-heading">{{.Album}}</div>
+    	  <table class="table table-hover">
+    	    <thead>
+    	      <tr>
+    	        <th>#</th>
+    	        <th>音乐标题</th>
+    	        <th>歌手</th>
+    	        <th>操作</th>
+    	      </tr>
+    	    </thead>
+    	    <tbody>
+              {{$H := .H}}
+              {{range .List}}
+    	      <tr>
+    	        <th scope="row">{{.Id}}</th>
+    	        <td>{{.Name}}</td>
+    	        <td>{{.Artists}}</td>
+    	        <td>
+    	        <a href="/music/{{.SongId}}{{if $H}}?h=on{{end}}" class="btn btn-primary btn-xs" role="button" target="_blank">查看详细</a>
+    	        </td>
+    	      </tr>
+              {{end}}
+    	    </tbody>
+    	  </table>
+          {{end}}
+    	</div>
+    </div>
+</div>
+<script type="text/javascript">
+  function y(){
+    var old = document.getElementById("listId")
+    if(old.value.length < 5){
+      alert("输入内容不正确");
+      return false
+    }
+    return true
+  }
+</script>
+{{template "tongji".}}
+</body>
+</html>
