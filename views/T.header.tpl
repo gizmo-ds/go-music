@@ -13,7 +13,6 @@
   <link href="/static/css/jumbotron.css" rel="stylesheet">
   <link href="/static/MediaElement/mediaelementplayer.min.css" rel="stylesheet">
 
-  <script src="/static/js/jquery.js"></script>
   <script src="/static/js/jquery.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/MediaElement/mediaelement-and-player.min.js"></script>{{end}}
