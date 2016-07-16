@@ -23,7 +23,7 @@ func (c *AlbunController) Get() {
 	}
 	c.Data["Title"] = "专辑查询 | 负荷领域"
 	c.Data["Name"] = models.NAME
-	c.TplName = "netease-albumodels.html"
+	c.TplName = "netease-album.html"
 }
 
 func (c *AlbunController) Post() {
@@ -38,7 +38,7 @@ func (c *AlbunController) Post() {
 	}
 	c.Data["Title"] = "专辑查询 | 负荷领域"
 	c.Data["Name"] = models.NAME
-	c.TplName = "netease-albumodels.html"
+	c.TplName = "netease-album.html"
 }
 
 func albumGet(albumId string) (list []song, title string) {

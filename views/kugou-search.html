@@ -18,6 +18,9 @@
               <label>
                 <input type="checkbox" name="h"> 优先选择高音质
               </label>
+              <label>
+                <input type="checkbox" name="download"> 查询并解析(速度会很慢, 且搜索结果超过30条不解析)
+              </label>
             </div>
     	    </form>
     	  </div>
@@ -35,10 +38,11 @@
     	      </tr>
     	    </thead>
     	    <tbody>
+              {{$Download := .Download}}
               {{range .List}}
     	      <tr>
     	        <th scope="row">{{.Id}}</th>
-    	        <td>{{.Title}}</td>
+    	        <td width="500">{{.Title}}</td>
     	        <td>{{.Name}}</td>
     	        <td>
                   <form method="POST" action="/kugou/{{.Hash}}" accept-charset="UTF-8" target="_blank">
@@ -46,6 +50,7 @@
                     <input type="hidden" id="Name" name="Name" value="{{.Name}}">
                     <input type="hidden" id="HashMV" name="HashMV" value="{{.HashMV}}">
                     <input type="hidden" id="Album" name="Album" value="{{.Album}}">
+                    {{if $Download}}<a class="btn btn-success btn-xs" role="button" href="{{.Url}}" download="{{.Url}}">下载音乐</a>{{end}}
                     <button class="btn btn-primary btn-xs" type="submit" target="_blank">查看详细</button>
                   </form>
     	        </td>

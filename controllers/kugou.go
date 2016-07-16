@@ -41,6 +41,7 @@ func (c *KugouController) Post() {
 	c.Data["IsKugou"] = true
 	keyword := c.Input().Get("key")
 	h := c.Input().Get("h") == "on"
+	download := c.Input().Get("download") == "on"
 	var song KugouSong
 	song.Hash = c.Ctx.Input.Param(":hash")
 	song.Title = c.Input().Get("Title")
@@ -58,7 +59,10 @@ func (c *KugouController) Post() {
 		c.TplName = "kugou-music.html"
 		return
 	}
-	list := KugouSearch(keyword, h)
+	list := KugouSearch(keyword, h, download)
+	if download && len(list) <= 30 {
+		c.Data["Download"] = true
+	}
 	c.Data["Value"] = keyword
 	c.Data["NotHide"] = true
 	c.Data["List"] = list
@@ -82,7 +86,7 @@ func KugouPic(hash string) (url string) {
 	return
 }
 
-func KugouSearch(keyword string, H bool) (list []KugouSong) {
+func KugouSearch(keyword string, H, dow bool) (list []KugouSong) {
 	keyword = strings.Replace(keyword, " ", "+", -1)
 	s := string(HttpGet("http://mobilecdn.kugou.com/api/v3/search/song?format=jsonp&keyword="+keyword+"&page=1&pagesize=50&showtype=1", ""))
 	if strings.Index(s, "(") == -1 {
@@ -122,7 +126,9 @@ func KugouSearch(keyword string, H bool) (list []KugouSong) {
 		song.Id = i + 1
 		song.H = H
 		song.HashMV, _ = info.Get("mvhash").String()
-		// beego.Error(song)
+		if dow && song.Hash != "" && h <= 30 {
+			song.Url = KugouGetUrl(song.Hash)
+		}
 		list = append(list, song)
 	}
 	return
