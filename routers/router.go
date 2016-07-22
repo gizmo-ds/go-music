@@ -10,7 +10,6 @@ func init() {
 	beego.Router("/album", &controllers.AlbunController{})
 	beego.Router("/album/:id", &controllers.AlbunController{})
 	beego.Router("/song", &controllers.SongController{})
-	beego.Router("/help", &controllers.HelpController{})
 	beego.Router("/xiami", &controllers.XiamiController{})
 	beego.Router("/xiami/:id", &controllers.XiamiController{})
 	beego.Router("/kugou", &controllers.KugouController{})

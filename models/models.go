@@ -53,6 +53,32 @@ func HttpGet(url string) (body []byte) {
 	return
 }
 
+func HttpPost(url, data string) (body []byte) {
+	client := &http.Client{}
+	reqest, err := http.NewRequest("POST", url, strings.NewReader(data))
+	if err != nil {
+		return
+	}
+	reqest.Header.Set("Cookie", "appver=1.5.0.75771")
+	reqest.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	reqest.Header.Set("Referer", "http://music.163.com/")
+
+	response, err := client.Do(reqest)
+	defer response.Body.Close()
+
+	if err != nil {
+		return
+	}
+
+	if response.StatusCode == 200 {
+		body, err = ioutil.ReadAll(response.Body)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
 func GetId(url string) (id string) {
 	reg, _ := regexp.Compile(`[1-9]([0-9]{3,11})`)
 	id = reg.FindString(url)

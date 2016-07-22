@@ -4,6 +4,31 @@
 {{template "jumbotron".}}
 <div class="container">
     <div class="row">
+      {{if .Panel}}
+      <ol class="breadcrumb">
+        <li><a href="/song">首页</a></li>
+        <li><a href="/song">网易云音乐</a></li>
+        <li class="active">音乐搜索</li>
+      </ol>
+      {{else}}
+      <div class="panel panel-default">
+    	  <div class="panel-heading">音乐搜索</div>
+    	  <div class="panel-body">
+    	    <form method="POST" action="/song" accept-charset="UTF-8">
+    	      <div class="input-group">
+    	        <input class="form-control" id="songKey" name="songKey" placeholder="如: 周杰伦" autocomplete="off" value="{{.Value}}">
+    	        <span class="input-group-btn">
+    	          <button class="btn btn-default" type="submit" onclick="return search();">搜索</button>
+    	        </span>
+    	      </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="h"> 优先选择高音质
+              </label>
+            </div>
+    	    </form>
+    	  </div>
+    	</div>
       <div class="panel panel-default">
         <div class="panel-heading">请输入音乐ID或音乐分享链接 (支持多行查询)</div>
         <div class="panel-body">
@@ -18,9 +43,11 @@
           </form>
         </div>
       </div>
-      {{if .List}}
+      {{end}}
+      {{$H := .H}}
+      {{if .Panel}}
       <div class="panel panel-success">
-        <div class="panel-heading">查询到{{.L|len}}首</div>
+        <div class="panel-heading">查询到{{.List|len}}首</div>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -31,13 +58,13 @@
             </tr>
           </thead>
           <tbody>
-            {{range .L}}
+            {{range .List}}
             <tr>
-              <th scope="row">{{.I}}</th>
-              <td>{{.Title}}</td>
+              <th scope="row">{{.Id}}</th>
               <td>{{.Name}}</td>
+              <td>{{.Artists}}</td>
               <td>
-              <a href="/music/{{.Id}}{{if .H}}?h=on{{end}}" class="btn btn-primary btn-xs" role="button" target="_blank">查看详细</a>
+              <a href="/music/{{.SongId}}{{if $H}}?h=on{{end}}" class="btn btn-primary btn-xs" role="button" target="_blank">查看详细</a>
               </td>
             </tr>{{end}}
           </tbody>
@@ -49,6 +76,14 @@
   function y(){
     var old = document.getElementById("songId")
     if(old.value.length < 5){
+      alert("输入内容不正确");
+      return false
+    }
+    return true
+  }
+  function search(){
+    var old = document.getElementById("songKey")
+    if(old.value.length < 1){
       alert("输入内容不正确");
       return false
     }

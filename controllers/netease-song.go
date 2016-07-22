@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/astaxie/beego"
 	json "github.com/bitly/go-simplejson"
 	"github.com/loadfield/go-music/models"
-	"strconv"
-	"strings"
 )
 
 type SongController struct {
@@ -19,13 +20,14 @@ func (c *SongController) Get() {
 func songTpl(c *SongController) {
 	c.Data["Title"] = "音乐查询 | 负荷领域"
 	c.Data["Name"] = models.NAME
-	c.Data["Is163"] = true
 	c.TplName = "netease-song.html"
 }
 
 func (c *SongController) Post() {
 	songId := c.Input().Get("songId")
+	songKey := c.Input().Get("songKey")
 	h := c.Input().Get("h") == "on"
+	// download := c.Input().Get("download") == "on"
 	if songId != "" {
 		if strings.Index(songId, "\n") != -1 {
 			arr := strings.Split(songId, "\n")
@@ -33,9 +35,10 @@ func (c *SongController) Post() {
 				arr[i] = models.GetId(arr[i])
 			}
 			// beego.Error(arr)
-			c.Data["List"] = true
-			L := songLise(arr, h)
-			c.Data["L"] = L
+			c.Data["Panel"] = true
+			List := songLise(arr)
+			c.Data["H"] = h
+			c.Data["List"] = List
 			c.Data["Value"] = songId
 			songTpl(c)
 		} else {
@@ -46,21 +49,26 @@ func (c *SongController) Post() {
 			}
 			c.Redirect("/music/"+songId, 302)
 		}
+	} else if songKey != "" {
+		List := SongSearch(songKey)
+		c.Data["Panel"] = true
+		c.Data["List"] = List
+		songTpl(c)
 	} else {
 		c.Redirect("/song", 302)
 	}
 }
 
-func songLise(arr []string, h bool) (list []songs) {
+func songLise(arr []string) (list []song) {
 	for i := 0; i < len(arr); i++ {
-		song := GetSongDetail(arr[i], h)
-		song.I = i + 1
-		list = append(list, song)
+		s := GetSongDetail(arr[i])
+		s.Id = i + 1
+		list = append(list, s)
 	}
 	return list
 }
 
-func GetSongDetail(songId string, h bool) (song songs) {
+func GetSongDetail(songId string) (s song) {
 	j, err := json.NewJson(models.HttpGet("http://music.163.com/api/song/detail/?id=" + songId + "&ids=%5B" + songId + "%5D"))
 	if err != nil {
 		beego.Error("NewJson")
@@ -72,16 +80,54 @@ func GetSongDetail(songId string, h bool) (song songs) {
 		return
 	}
 	if code != 200 {
-		song = songs{Title: "查询失败", Name: "查询失败"}
+		s = song{Name: "查询失败", Artists: "查询失败"}
 		return
 	}
-	song.Title, err = j.Get("songs").GetIndex(0).Get("name").String()
+	s.Name, err = j.Get("songs").GetIndex(0).Get("name").String()
 	if err != nil {
-		song = songs{Title: "查询失败", Name: "查询失败"}
+		s = song{Name: "查询失败", Artists: "查询失败"}
 		return
 	}
-	song.Name, _ = j.Get("songs").GetIndex(0).Get("artists").GetIndex(0).Get("name").String()
-	song.Id, _ = strconv.Atoi(songId)
-	song.H = h
+	s.Album, _ = j.Get("songs").GetIndex(0).Get("album").GetIndex(0).Get("name").String()
+	s.Artists, _ = j.Get("songs").GetIndex(0).Get("artists").GetIndex(0).Get("name").String()
+	s.SongId, _ = strconv.Atoi(songId)
+	return
+}
+
+func SongSearch(songKey string) (list []song) {
+	str := models.HttpPost("http://music.163.com/api/search/pc", "offset=0&limit=100&type=1&s="+songKey)
+	j, err := json.NewJson(str)
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+	code, _ := j.Get("code").Int()
+	if code != 200 {
+		return
+	}
+	songs := j.Get("result").Get("songs")
+	songCount, _ := j.Get("result").Get("songCount").Int()
+	if songCount > 100 {
+		songCount = 100
+	}
+	var song song
+	for i := 0; i < songCount; i++ {
+		song = GetSong(songs.GetIndex(i), false)
+		song.Id = i + 1
+		list = append(list, song)
+	}
+	return
+}
+
+func GetSong(j *json.Json, url bool) (s song) {
+	s.SongId, _ = j.Get("id").Int()
+	s.Name, _ = j.Get("name").String()
+	s.Artists, _ = j.Get("artists").GetIndex(0).Get("name").String()
+	s.Album, _ = j.Get("album").Get("name").String()
+	s.AlbumId, _ = j.Get("album").Get("id").Int()
+	s.AlbumPic, _ = j.Get("album").Get("picUrl").String()
+	if url {
+		s.Url, _ = j.Get("mp3Url").String()
+	}
 	return
 }

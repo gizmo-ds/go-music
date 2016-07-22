@@ -25,7 +25,6 @@
             </li>
             <li{{if .IsXiami}} class="active"{{end}}><a href="/xiami">虾米音乐</a></li>
             <li{{if .IsKugou}} class="active"{{end}}><a href="/kugou">酷狗音乐</a></li>
-            <li{{if .IsHelp}} class="active"{{end}}><a href="/help">使用帮助</a></li>
             <li{{if .IsMessage}} class="active"{{end}}><a href="/message">留言板</a></li>
          </ul>
       </div>
