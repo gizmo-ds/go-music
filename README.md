@@ -4,4 +4,4 @@
 #### 村雨也是初学Go,代码写得烂的话莫见怪.  
 
 ###### 效果演示
-* (http://music.liuli.lol/)
+* http://music.mc-x.com/
