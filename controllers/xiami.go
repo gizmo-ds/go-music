@@ -25,10 +25,6 @@ type xiamiSong struct {
 	Listen_file string
 }
 
-const (
-	_XIAMITOKEN = "abchdjah6264817"
-)
-
 func (c *XiamiController) Get() {
 	id := c.Ctx.Input.Param(":id")
 	// beego.Error(id)
