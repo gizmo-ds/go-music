@@ -110,9 +110,8 @@ func SongSearch(songKey string) (list []song) {
 	if songCount > 100 {
 		songCount = 100
 	}
-	var song song
 	for i := 0; i < songCount; i++ {
-		song = GetSong(songs.GetIndex(i), false)
+		song := GetSong(songs.GetIndex(i), false)
 		song.Id = i + 1
 		list = append(list, song)
 	}
