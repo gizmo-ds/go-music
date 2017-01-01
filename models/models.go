@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type HomeSong struct {
@@ -128,13 +130,27 @@ func StrGetBetween(str, start, end string) string { //取字符串中间
 	return str
 }
 
-func StrKillHtml(html string) string { //干掉HTML标记
+// StrKillHtml 干掉HTML标记
+func StrKillHtml(html string) string {
 	r := regexp.MustCompile(`<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>|&.{1,8};`)
 	return r.ReplaceAllString(html, "")
 }
 
-func StrKillBlank(str string) string { //干掉空白和换行
+// StrKillBlank 干掉空白和换行
+func StrKillBlank(str string) string {
 	str = strings.Replace(str, " ", "", -1)
 	str = strings.Replace(str, "\n", "", -1)
+	return str
+}
+
+// HttpsOn 链接Https字符串替换
+func HttpsOn(str string) string {
+	t, err := beego.AppConfig.Bool("https")
+	if err != nil {
+		return str
+	}
+	if t {
+		return strings.Replace(str, "http://", "https://", -1)
+	}
 	return str
 }

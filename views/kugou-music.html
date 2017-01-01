@@ -12,8 +12,8 @@
             <h2>{{.Title}}</h2>
             <p>{{.Album}}</p>
             <p>{{.Name}}</p>
-            <a class="btn btn-success btn-sm" role="button" href="{{.Url}}" download="{{.Url}}">下载音乐</a>
-            <a class="btn btn-primary btn-sm" role="button" onclick="copy('{{.Url}}');">复制链接</a>
+            <a class="btn btn-success btn-sm" role="button" href="{{.Url}}" download="{{.Title}}.mp3" id="dow">下载音乐</a>
+            <a class="btn btn-primary btn-sm" role="button" onclick="copy();">复制链接</a>
           </div>
           <div style="margin-top: 36px;">
             <audio src="{{.Url}}" type="audio/mp3" controls="controls" width="100%"></audio>
@@ -31,7 +31,7 @@
 </div>
 <script type="text/javascript">
   function copy(url){
-    prompt('您的浏览器不支持复制，请 Ctrl+C 复制', url);
+    prompt('请 Ctrl+C 复制', $("#dow").attr("href"));
   }
 </script>
 {{template "tongji".}}
