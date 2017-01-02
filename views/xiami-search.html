@@ -45,7 +45,7 @@
                     <input type="hidden" id="Album_logo" name="Album_logo" value="{{.Album_logo}}">
                     <input type="hidden" id="Listen_file" name="Listen_file" value="{{.Listen_file}}">
                     <input type="hidden" id="Artist_logo" name="Artist_logo" value="{{.Artist_logo}}">
-                    <a class="btn btn-success btn-xs" role="button" href="{{.Listen_file}}" download="{{.Listen_file}}">下载音乐</a>
+                    <a class="btn btn-success btn-xs" role="button" href="{{.Listen_file | https}}" download="{{.Listen_file | https}}">下载音乐</a>
                     <button class="btn btn-primary btn-xs" type="submit" target="_blank">查看详细</button>
                   </form>
     	        </td>
@@ -81,7 +81,7 @@
     return true
   }
   function copy(url){
-    prompt('您的浏览器不支持复制，请 Ctrl+C 复制', url);
+    prompt('请 Ctrl+C 复制', url);
   }
 </script>
 {{template "tongji".}}
