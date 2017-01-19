@@ -7,4 +7,7 @@
   
 ![image](https://music.liuli.lol/static/img/20170102.jpg)
 ###### 效果演示
-* http://music.liuli.lol/
+* https://music.liuli.lol/
+
+###### 如何使用
+复制build目录下相应平台的文件到上级目录运行即可.
