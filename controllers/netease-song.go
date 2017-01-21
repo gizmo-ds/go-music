@@ -36,7 +36,7 @@ func (c *SongController) Post() {
 			}
 			// beego.Error(arr)
 			c.Data["Panel"] = true
-			List := songLise(arr)
+			List := songList(arr)
 			c.Data["H"] = h
 			c.Data["List"] = List
 			c.Data["Value"] = songId
@@ -59,7 +59,7 @@ func (c *SongController) Post() {
 	}
 }
 
-func songLise(arr []string) (list []song) {
+func songList(arr []string) (list []song) {
 	for i := 0; i < len(arr); i++ {
 		s := GetSongDetail(arr[i])
 		s.Id = i + 1
